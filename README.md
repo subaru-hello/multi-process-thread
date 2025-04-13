@@ -7,6 +7,59 @@ This project implements and compares four different communication patterns in C:
 3. Multi Process Single Thread
 4. Multi Process Multi Thread
 
+## Architecture Comparison
+
+```mermaid
+graph TD
+    subgraph "Single Process Single Thread"
+        A1[Client 1] -->|Request| B1[Server Process]
+        A2[Client 2] -->|Wait| B1
+        A3[Client 3] -->|Wait| B1
+        B1 -->|Response| A1
+        B1 -->|Response| A2
+        B1 -->|Response| A3
+    end
+
+    subgraph "Single Process Multi Thread"
+        C1[Client 1] -->|Request| D1[Server Process]
+        C2[Client 2] -->|Request| D1
+        C3[Client 3] -->|Request| D1
+        D1 --> E1[Thread 1]
+        D1 --> E2[Thread 2]
+        D1 --> E3[Thread 3]
+        E1 -->|Response| C1
+        E2 -->|Response| C2
+        E3 -->|Response| C3
+    end
+
+    subgraph "Multi Process Single Thread"
+        F1[Client 1] -->|Request| G1[Server Process]
+        F2[Client 2] -->|Request| G1
+        F3[Client 3] -->|Request| G1
+        G1 --> H1[Worker Process 1]
+        G1 --> H2[Worker Process 2]
+        G1 --> H3[Worker Process 3]
+        H1 -->|Response| F1
+        H2 -->|Response| F2
+        H3 -->|Response| F3
+    end
+
+    subgraph "Multi Process Multi Thread"
+        I1[Client 1] -->|Request| J1[Server Process]
+        I2[Client 2] -->|Request| J1
+        I3[Client 3] -->|Request| J1
+        J1 --> K1[Worker Process 1]
+        J1 --> K2[Worker Process 2]
+        K1 --> L1[Thread 1.1]
+        K1 --> L2[Thread 1.2]
+        K2 --> L3[Thread 2.1]
+        K2 --> L4[Thread 2.2]
+        L1 -->|Response| I1
+        L2 -->|Response| I2
+        L3 -->|Response| I3
+    end
+```
+
 ## Historical Context and Architectural Evolution
 
 ### 1. Single Process Single Thread
